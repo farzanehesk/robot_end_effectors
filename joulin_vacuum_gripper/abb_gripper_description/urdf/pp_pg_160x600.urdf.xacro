@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="pp_pg_160x600" params="parent prefix">
+
+    <link name="${prefix}gripper_base_link">
+      <visual>
+        <origin xyz="0 0 0.087" rpy="${pi/2} ${pi} ${-pi/2}"/>
+        <geometry>
+          <mesh filename="package://abb_gripper_description/meshes/pp_pg_160x600.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="gripper_grey">
+          <color rgba="0.6 0.6 0.65 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <!-- Same rotation as visual so box aligns with mesh -->
+        <origin xyz="0 0 0.087" rpy="${pi/2} ${pi} ${-pi/2}"/>
+        <geometry>
+          <!-- In STL frame: X=600mm, Y=87mm depth, Z=160mm width -->
+          <box size="0.600 0.087 0.160"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="4.6"/>
+        <origin xyz="0 0 0.0435" rpy="0 0 0"/>
+        <inertia
+          ixx="0.03481" ixy="0.0" ixz="0.0"
+          iyy="0.13880" iyz="0.0"
+          izz="0.14827"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}tool0_to_gripper" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}gripper_base_link"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}gripper_tcp"/>
+    <joint name="${prefix}gripper_base_to_tcp" type="fixed">
+      <parent link="${prefix}gripper_base_link"/>
+      <child link="${prefix}gripper_tcp"/>
+      <origin xyz="0 0 0.087" rpy="0 0 0"/>
+    </joint>
+
+  </xacro:macro>
+
+</robot>
