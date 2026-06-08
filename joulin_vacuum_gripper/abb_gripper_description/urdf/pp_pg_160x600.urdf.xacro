@@ -9,29 +9,9 @@
   Email:       farzane.eskandarii@gmail.com
   Date:        2026-06-05
   ============================================================
-
-  Physical dimensions (from datasheet + STL bounding box):
-    Length: 600mm (X axis in mesh)
-    Width:  160mm (Z axis in mesh)
-    Height:  87mm (Y axis in mesh, origin at TOP = flange face)
-    Weight:  4.6 kg
-
-  STL coordinate system:
-    X: -300 to +300  (600mm length, centered)
-    Y:    0 to  +87  (87mm height, Y=0 is mounting face)
-    Z:  -80 to  +80  (160mm width, centered)
-    Top face normals point +Y
-
-  Visual rotation: rpy="${pi/2} ${pi} ${-pi/2}"
-    Maps STL to correct orientation with mounting face at tool parent
-
-  USAGE:
-    <xacro:include filename="$(find abb_gripper_description)/urdf/pp_pg_160x600.urdf.xacro"/>
-    <xacro:pp_pg_160x600 parent="rob1_swa_160_tool_mount" prefix="rob1_"/>
-
-  TO REMOVE: comment out those two lines.
-
-  TCP frame: rob1_gripper_tcp — 87mm forward from parent frame
+  STL: Y=0 mounting face, Y=+87 suction face
+  Visual xyz="0 0 0.087" — correct position, small gap is flange mesh depth
+  Collision: simple box, same position as visual, NO rotation needed
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
@@ -50,17 +30,22 @@
       </visual>
 
       <collision>
-        <!-- Same rotation as visual so box aligns with mesh -->
-        <origin xyz="0 0 0.087" rpy="${pi/2} ${pi} ${-pi/2}"/>
+        <!--
+          Box in URDF frame (no rotation):
+            X = 0.600m (600mm length, horizontal)
+            Y = 0.160m (160mm width)
+            Z = 0.087m (87mm depth, forward from flange)
+          Center at half depth = 0.0435m forward from link origin
+        -->
+        <origin xyz="0 0 0.0435" rpy="0 0 ${pi/2}"/>
         <geometry>
-          <!-- In STL frame: X=600mm, Y=87mm depth, Z=160mm width -->
-          <box size="0.600 0.087 0.160"/>
+          <box size="0.600 0.160 0.087"/>
         </geometry>
       </collision>
 
       <inertial>
         <mass value="4.6"/>
-        <origin xyz="0 0 0.0435" rpy="0 0 0"/>
+        <origin xyz="0 0 0.0435" rpy="0 0 ${pi/2}"/>
         <inertia
           ixx="0.03481" ixy="0.0" ixz="0.0"
           iyy="0.13880" iyz="0.0"

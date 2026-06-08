@@ -10,32 +10,24 @@
   Date:        2026-06-05
   ============================================================
 
-  STL coordinate system (both parts):
-    Cylinder AXIS along Y
-    X: centered (-88 to +88)
-    Z: centered (-108.5 to +108.5)
+  Rotation rpy="${pi/2} ${pi} ${-pi/2}" maps STL Y → URDF -Z
 
-  SWK-160: Y=-30 (flange face) to Y=+70.6 (interface face)
-  SWA-160: Y=-37.5 (tool mount) to Y=0 (interface face)
+  SWK-160: Y=-30 (flange face) to Y=+70.6 (interface) = 100.6mm
+    After rotation: flange face at URDF Z=+30, interface at URDF Z=-70.6
+    Visual offset = total_height - abs(Y_min) = 100.6 - 30 = 70.6mm
+    → xyz="0 0 0.0706" places flange face flush at link origin (Z=0)
 
-  Rotation needed: STL Y → tool0 Z = rpy="${-pi/2} 0 0"
-
-  Offsets (after rotation, STL Y becomes URDF Z):
-    SWK: flange face at STL Y=-30 → after rotation URDF Z=-30mm
-         → xyz="0 0 0.030" pushes mounting face to Z=0 (tool0)
-    SWA: interface face at STL Y=0 → after rotation URDF Z=0
-         → xyz="0 0 0" interface face already at Z=0
+  SWA-160: Y=-37.5 (tool mount) to Y=0 (interface) = 37.6mm
+    After rotation: interface at URDF Z=0, tool mount at URDF Z=+37.5
+    Visual offset = abs(Y_min) = 37.5mm
+    → xyz="0 0 0.0375" places interface face flush at link origin (Z=0)
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <!-- ═══════════════════════════════════════════════════
-       SWK-160 ROBOT SIDE — always mounted on tool0
-       ═══════════════════════════════════════════════════ -->
   <xacro:macro name="swk_160_robot_side" params="parent prefix">
-
     <link name="${prefix}swk_160_link">
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0.0706" rpy="${pi/2} ${pi} ${-pi/2}"/>
         <geometry>
           <mesh filename="package://sws_160_description/meshes/swk_160_robot_side_bin.stl"
                 scale="0.001 0.001 0.001"/>
@@ -70,18 +62,13 @@
       <child link="${prefix}swk_160_interface"/>
       <origin xyz="0 0 0.1006" rpy="0 0 0"/>
     </joint>
-
   </xacro:macro>
 
 
-  <!-- ═══════════════════════════════════════════════════
-       SWA-160 TOOL SIDE — permanently in URDF
-       ═══════════════════════════════════════════════════ -->
   <xacro:macro name="swa_160_tool_side" params="parent prefix">
-
     <link name="${prefix}swa_160_link">
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0.0375" rpy="${pi/2} ${pi} ${-pi/2}"/>
         <geometry>
           <mesh filename="package://sws_160_description/meshes/swa_160_tool_side_bin.stl"
                 scale="0.001 0.001 0.001"/>
@@ -116,7 +103,6 @@
       <child link="${prefix}swa_160_tool_mount"/>
       <origin xyz="0 0 0.0376" rpy="0 0 0"/>
     </joint>
-
   </xacro:macro>
 
 </robot>
