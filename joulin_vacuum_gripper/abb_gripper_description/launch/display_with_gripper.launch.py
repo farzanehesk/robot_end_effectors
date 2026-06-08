@@ -1,3 +1,14 @@
+# ============================================================
+# Package:     abb_gripper_description
+# File:        display_with_gripper.launch.py
+# Description: Launch file to visualize ABB IRB6700 + Joulin
+#              PP-PG-160x600 gripper URDF geometry in RViz.
+#              Does NOT connect to real hardware.
+# Author:      Farzaneh Eskandari
+# Email:       farzane.eskandarii@gmail.com
+# Date:        2026-06-05
+# Usage:       ros2 launch abb_gripper_description display_with_gripper.launch.py
+# ============================================================
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription

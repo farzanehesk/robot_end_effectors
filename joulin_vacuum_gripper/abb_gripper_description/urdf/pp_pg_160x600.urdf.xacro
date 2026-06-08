@@ -1,4 +1,38 @@
 <?xml version="1.0"?>
+<!--
+  ============================================================
+  Package:     abb_gripper_description
+  File:        pp_pg_160x600.urdf.xacro
+  Description: URDF/xacro for Joulin PP-PG-160x600-P20-2STX4
+               pneumatic vacuum gripper on ABB IRB6700 175/3.05
+  Author:      Farzaneh Eskandari
+  Email:       farzane.eskandarii@gmail.com
+  Date:        2026-06-05
+  ============================================================
+
+  Physical dimensions (from datasheet + STL bounding box):
+    Length: 600mm (X axis in mesh)
+    Width:  160mm (Z axis in mesh)
+    Height:  87mm (Y axis in mesh, origin at TOP = flange face)
+    Weight:  4.6 kg
+
+  STL coordinate system:
+    X: -300 to +300  (600mm length, centered)
+    Y:    0 to  +87  (87mm height, Y=0 is mounting face)
+    Z:  -80 to  +80  (160mm width, centered)
+    Top face normals point +Y
+
+  Visual rotation: rpy="${pi/2} ${pi} ${-pi/2}"
+    Maps STL to correct orientation with mounting face at tool parent
+
+  USAGE:
+    <xacro:include filename="$(find abb_gripper_description)/urdf/pp_pg_160x600.urdf.xacro"/>
+    <xacro:pp_pg_160x600 parent="rob1_swa_160_tool_mount" prefix="rob1_"/>
+
+  TO REMOVE: comment out those two lines.
+
+  TCP frame: rob1_gripper_tcp — 87mm forward from parent frame
+-->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:macro name="pp_pg_160x600" params="parent prefix">
